@@ -29,10 +29,6 @@ jobs:
         run: |
           $ver = '${{ github.ref }}' -replace 'refs/tags/',''
           Compress-Archive -Path MareSynchronos\bin\x64\Release\* -DestinationPath SnowcloakClient.zip
-          '{ "version": "' + $ver + '" }' | Out-File -FilePath '.\assets\mp3\manifest.json'
-          '{ "version": "' + $ver + '" }' | Out-File -FilePath '.\assets\ogg\manifest.json'
-          Compress-Archive -Path assets\mp3\* -DestinationPath assets-mp3.zip
-          Compress-Archive -Path assets\ogg\* -DestinationPath assets-ogg.zip
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
         with:

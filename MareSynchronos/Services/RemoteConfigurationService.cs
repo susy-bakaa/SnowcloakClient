@@ -174,26 +174,27 @@ public sealed class RemoteConfigurationService
 
     private void LoadConfig(JsonObject jsonDoc)
     {
-        var ts = jsonDoc["ts"]!.GetValue<ulong>();
+        ulong ts = 1755859494;
 
-        if (ts <= _configService.Current.Timestamp)
-        {
-            _logger.LogDebug("Remote configuration is not newer than cached config");
-            return;
-        }
+        //if (ts <= _configService.Current.Timestamp)
+        //{
+        //    _logger.LogDebug("Remote configuration is not newer than cached config");
+        //    return;
+        //}
 
         var signatures = jsonDoc["sig"]!.AsObject();
-        var configString = jsonDoc["config"]!.GetValue<string>();
+        var configString = "{\"mainServer\":{\"api_url\":\"wss://hub.snowcloak-sync.com/\",\"hub_url\":\"wss://hub.snowcloak-sync.com/mare\"},\"repoChange\":{\"current_repo\":\"https://hub.snowcloak-sync.com/repo.json\",\"valid_repos\":[\"https://hub.snowcloak-sync.com/repo.json\"]},\"noSnap\":{\"listOfPlugins\":[\"Snapper\",\"Snappy\",\"Meddle.Plugin\"]}}";
+    //    var configString = jsonDoc["config"]!.GetValue<string>();
     //    bool verified = signatures.Any(sig =>
     //        ConfigPublicKeys.TryGetValue(sig.Key, out var pubKey) &&
     //            VerifySignature(configString, ts, sig.Value!.GetValue<string>(), pubKey));
 
-    bool verified = true;
-        if (!verified)
-        {
-            _logger.LogWarning("Could not verify signature for downloaded remote config");
-            return;
-        }
+    //bool verified = true;
+    //    if (!verified)
+   //     {
+   //         _logger.LogWarning("Could not verify signature for downloaded remote config");
+    //        return;
+     //   }
 
         _configService.Current.Configuration = JsonNode.Parse(configString)!.AsObject();
         _configService.Current.Timestamp = ts;

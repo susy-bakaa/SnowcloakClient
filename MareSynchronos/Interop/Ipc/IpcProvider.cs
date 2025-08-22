@@ -68,9 +68,9 @@ public class IpcProvider : IHostedService, IMediatorSubscriber
         _logger.LogDebug("Starting IpcProvider Service");
         _loadFileProvider = _pi.GetIpcProvider<string, IGameObject, bool>("ElfSync.LoadMcdf");
         _loadFileProvider.RegisterFunc(LoadMcdf);
-        _loadFileAsyncProvider = _pi.GetIpcProvider<string, IGameObject, Task<bool>>("ElezenSync.LoadMcdfAsync");
+        _loadFileAsyncProvider = _pi.GetIpcProvider<string, IGameObject, Task<bool>>("SnowcloakSync.LoadMcdfAsync");
         _loadFileAsyncProvider.RegisterFunc(LoadMcdfAsync);
-        _handledGameAddresses = _pi.GetIpcProvider<List<nint>>("ElezenSync.GetHandledAddresses");
+        _handledGameAddresses = _pi.GetIpcProvider<List<nint>>("SnowcloakSync.GetHandledAddresses");
         _handledGameAddresses.RegisterFunc(GetHandledAddresses);
 
         _loadFileProviderMare = _pi.GetIpcProvider<string, IGameObject, bool>("MareSynchronos.LoadMcdf");

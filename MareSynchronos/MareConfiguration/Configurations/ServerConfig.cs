@@ -10,7 +10,7 @@ public class ServerConfig : IMareConfiguration
 
     public List<ServerStorage> ServerStorage { get; set; } = new()
     {
-        { new ServerStorage() { ServerName = ApiController.ElezenServer, ServerUri = ApiController.ElezenServiceUri } },
+        { new ServerStorage() { ServerName = ApiController.SnowcloakServer, ServerUri = ApiController.SnowcloakServiceUri } },
     };
 
     public int Version { get; set; } = 1;

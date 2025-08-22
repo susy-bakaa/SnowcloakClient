@@ -500,13 +500,13 @@ public class ServerConfigurationManager
         for (int i = 0; i < _configService.Current.ServerStorage.Count; ++i)
         {
             var x = _configService.Current.ServerStorage[i];
-            if (x.ServerUri.Equals(ApiController.ElezenServiceUri, StringComparison.OrdinalIgnoreCase))
+            if (x.ServerUri.Equals(ApiController.SnowcloakServiceUri, StringComparison.OrdinalIgnoreCase))
                 elfExists = true;
         }
         if (!elfExists)
         {
-            _logger.LogDebug("Re-adding missing server {uri}", ApiController.ElezenServiceUri);
-            _configService.Current.ServerStorage.Insert(0, new ServerStorage() { ServerUri = ApiController.ElezenServiceUri, ServerName = ApiController.ElezenServer });
+            _logger.LogDebug("Re-adding missing server {uri}", ApiController.SnowcloakServiceUri);
+            _configService.Current.ServerStorage.Insert(0, new ServerStorage() { ServerUri = ApiController.SnowcloakServiceUri, ServerName = ApiController.SnowcloakServer });
             if (_configService.Current.CurrentServer >= 0)
                 _configService.Current.CurrentServer++;
         }

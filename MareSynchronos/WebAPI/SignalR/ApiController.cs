@@ -21,10 +21,10 @@ namespace MareSynchronos.WebAPI;
 #pragma warning disable MA0040
 public sealed partial class ApiController : DisposableMediatorSubscriberBase, IMareHubClient
 {
-    public const string ElezenServer = "Snowcloak Main Server";
-    public const string ElezenServiceUri = "wss://hub.snowcloak-sync.com";
-    public const string ElezenServiceApiUri = "wss://hub.snowcloak-sync.com/";
-    public const string ElezenServiceHubUri = "wss://hub.snowcloak-sync.com/mare";
+    public const string SnowcloakServer = "Snowcloak Main Server";
+    public const string SnowcloakServiceUri = "wss://hub.snowcloak-sync.com";
+    public const string SnowcloakServiceApiUri = "wss://hub.snowcloak-sync.com/";
+    public const string SnowcloakServiceHubUri = "wss://hub.snowcloak-sync.com/mare";
 
     private readonly DalamudUtilService _dalamudUtil;
     private readonly HubFactory _hubFactory;
@@ -194,7 +194,7 @@ public sealed partial class ApiController : DisposableMediatorSubscriberBase, IM
                         Mediator.Publish(new NotificationMessage("Client incompatible",
                             $"Your client is outdated ({currentClientVer.Major}.{currentClientVer.Minor}.{currentClientVer.Build}), current is: " +
                             $"{_connectionDto.CurrentClientVersion.Major}.{_connectionDto.CurrentClientVersion.Minor}.{_connectionDto.CurrentClientVersion.Build}. " +
-                            $"This client version is incompatible and will not be able to connect. Please update your Elezen client.",
+                            $"This client version is incompatible and will not be able to connect. Please update your Snowcloak client.",
                             NotificationType.Error));
                     }
                     await StopConnection(ServerState.VersionMisMatch).ConfigureAwait(false);
@@ -206,7 +206,7 @@ public sealed partial class ApiController : DisposableMediatorSubscriberBase, IM
                     Mediator.Publish(new NotificationMessage("Client outdated",
                         $"Your client is outdated ({currentClientVer.Major}.{currentClientVer.Minor}.{currentClientVer.Build}), current is: " +
                         $"{_connectionDto.CurrentClientVersion.Major}.{_connectionDto.CurrentClientVersion.Minor}.{_connectionDto.CurrentClientVersion.Build}. " +
-                        $"Please keep your Elezen client up-to-date.",
+                        $"Please keep your Snowcloak client up-to-date.",
                         NotificationType.Warning, TimeSpan.FromSeconds(15)));
                 }
 

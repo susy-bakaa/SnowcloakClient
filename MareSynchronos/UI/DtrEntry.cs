@@ -163,19 +163,19 @@ public sealed class DtrEntry : IDisposable, IHostedService
                         .Select(x => string.Format("{0}", _configService.Current.PreferNoteInDtrTooltip ? x.GetNoteOrName() : x.PlayerName));
                 }
 
-                tooltip = $"Elezen: Connected{Environment.NewLine}----------{Environment.NewLine}{string.Join(Environment.NewLine, visiblePairs)}";
+                tooltip = $"Snowcloak: Connected{Environment.NewLine}----------{Environment.NewLine}{string.Join(Environment.NewLine, visiblePairs)}";
                 colors = _configService.Current.DtrColorsPairsInRange;
             }
             else
             {
-                tooltip = "Elezen: Connected";
+                tooltip = "Snowcloak: Connected";
                 colors = _configService.Current.DtrColorsDefault;
             }
         }
         else
         {
             text = RenderDtrStyle(_configService.Current.DtrStyle, "\uE04C");
-            tooltip = "Elezen: Not Connected";
+            tooltip = "Snowcloak: Not Connected";
             colors = _configService.Current.DtrColorsNotConnected;
         }
 

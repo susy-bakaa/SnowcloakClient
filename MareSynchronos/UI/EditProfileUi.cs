@@ -35,7 +35,7 @@ public class EditProfileUi : WindowMediatorSubscriberBase
         ApiController apiController, UiSharedService uiSharedService, FileDialogManager fileDialogManager,
         ServerConfigurationManager serverConfigurationManager,
         MareProfileManager mareProfileManager, PerformanceCollectorService performanceCollectorService)
-        : base(logger, mediator, "Elezen Edit Profile###ElezenSyncEditProfileUI", performanceCollectorService)
+        : base(logger, mediator, "Snowcloak Edit Profile###SnowcloakSyncEditProfileUI", performanceCollectorService)
     {
         IsOpen = false;
         this.SizeConstraints = new()

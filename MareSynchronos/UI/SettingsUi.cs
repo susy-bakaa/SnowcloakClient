@@ -76,7 +76,7 @@ public class SettingsUi : WindowMediatorSubscriberBase
         FileCacheManager fileCacheManager,
         FileCompactor fileCompactor, ApiController apiController,
         IpcManager ipcManager, IpcProvider ipcProvider, CacheMonitor cacheMonitor,
-        DalamudUtilService dalamudUtilService, AccountRegistrationService registerService) : base(logger, mediator, "Elezen Settings", performanceCollector)
+        DalamudUtilService dalamudUtilService, AccountRegistrationService registerService) : base(logger, mediator, "Snowcloak Settings", performanceCollector)
     {
         _configService = configService;
         _pairManager = pairManager;
@@ -728,7 +728,7 @@ public class SettingsUi : WindowMediatorSubscriberBase
 
         _uiShared.BigText("Storage");
 
-        UiSharedService.TextWrapped("Elezen stores downloaded files from paired people permanently. This is to improve loading performance and requiring less downloads. " +
+        UiSharedService.TextWrapped("Snowcloak stores downloaded files from paired people permanently. This is to improve loading performance and requiring less downloads. " +
             "The storage governs itself by clearing data beyond the set storage size. Please set the storage size accordingly. It is not necessary to manually clear the storage.");
 
         _uiShared.DrawFileScanState();
@@ -745,7 +745,7 @@ public class SettingsUi : WindowMediatorSubscriberBase
         }
 
         ImGui.AlignTextToFramePadding();
-        ImGui.TextUnformatted("Monitoring Elezen Storage Folder: " + (_cacheMonitor.MareWatcher?.Path ?? "Not monitoring"));
+        ImGui.TextUnformatted("Monitoring Snowcloak Storage Folder: " + (_cacheMonitor.MareWatcher?.Path ?? "Not monitoring"));
         if (string.IsNullOrEmpty(_cacheMonitor.MareWatcher?.Path))
         {
             ImGui.SameLine();
@@ -763,7 +763,7 @@ public class SettingsUi : WindowMediatorSubscriberBase
                 _cacheMonitor.StartPenumbraWatcher(_ipcManager.Penumbra.ModDirectory);
                 _cacheMonitor.InvokeScan();
             }
-            UiSharedService.AttachToolTip("Attempts to resume monitoring for both Penumbra and Elezen Storage. "
+            UiSharedService.AttachToolTip("Attempts to resume monitoring for both Penumbra and Snowcloak Storage. "
                 + "Resuming the monitoring will also force a full scan to run." + Environment.NewLine
                 + "If the button remains present after clicking it, consult /xllog for errors");
         }
@@ -776,8 +776,8 @@ public class SettingsUi : WindowMediatorSubscriberBase
                     _cacheMonitor.StopMonitoring();
                 }
             }
-            UiSharedService.AttachToolTip("Stops the monitoring for both Penumbra and Elezen Storage. "
-                + "Do not stop the monitoring, unless you plan to move the Penumbra and Elezen Storage folders, to ensure correct functionality of Elezen." + Environment.NewLine
+            UiSharedService.AttachToolTip("Stops the monitoring for both Penumbra and Snowcloak Storage. "
+                + "Do not stop the monitoring, unless you plan to move the Penumbra and Snowcloak Storage folders, to ensure correct functionality of Snowcloak." + Environment.NewLine
                 + "If you stop the monitoring to move folders around, resume it after you are finished moving the files."
                 + UiSharedService.TooltipSeparator + "Hold CTRL to enable this button");
         }
@@ -794,7 +794,7 @@ public class SettingsUi : WindowMediatorSubscriberBase
         bool useFileCompactor = _configService.Current.UseCompactor;
         if (!useFileCompactor && !isLinux)
         {
-            UiSharedService.ColorTextWrapped("Hint: To free up space when using Elezen consider enabling the File Compactor", ImGuiColors.DalamudYellow);
+            UiSharedService.ColorTextWrapped("Hint: To free up space when using Snowcloak consider enabling the File Compactor", ImGuiColors.DalamudYellow);
         }
         if (isLinux || !_cacheMonitor.StorageisNTFS) ImGui.BeginDisabled();
         if (ImGui.Checkbox("Use file compactor", ref useFileCompactor))
@@ -903,7 +903,7 @@ public class SettingsUi : WindowMediatorSubscriberBase
         }
         UiSharedService.AttachToolTip("You normally do not need to do this. THIS IS NOT SOMETHING YOU SHOULD BE DOING TO TRY TO FIX SYNC ISSUES." + Environment.NewLine
             + "This will solely remove all downloaded data from all players and will require you to re-download everything again." + Environment.NewLine
-            + "Elezen's storage is self-clearing and will not surpass the limit you have set it to." + Environment.NewLine
+            + "Snowcloak's storage is self-clearing and will not surpass the limit you have set it to." + Environment.NewLine
             + "If you still think you need to do this hold CTRL while pressing the button.");
         if (!_readClearCache)
             ImGui.EndDisabled();
@@ -975,14 +975,14 @@ public class SettingsUi : WindowMediatorSubscriberBase
             _configService.Current.EnableRightClickMenus = enableRightClickMenu;
             _configService.Save();
         }
-        _uiShared.DrawHelpText("This will add Elezen related right click menu entries in the game UI on paired players.");
+        _uiShared.DrawHelpText("This will add Snowcloak related right click menu entries in the game UI on paired players.");
 
         if (ImGui.Checkbox("Display status and visible pair count in Server Info Bar", ref enableDtrEntry))
         {
             _configService.Current.EnableDtrEntry = enableDtrEntry;
             _configService.Save();
         }
-        _uiShared.DrawHelpText("This will add Elezen connection status and visible pair count in the Server Info Bar.\nYou can further configure this through your Dalamud Settings.");
+        _uiShared.DrawHelpText("This will add Snowcloak connection status and visible pair count in the Server Info Bar.\nYou can further configure this through your Dalamud Settings.");
 
         using (ImRaii.Disabled(!enableDtrEntry))
         {
@@ -1744,7 +1744,7 @@ public class SettingsUi : WindowMediatorSubscriberBase
                 if (true) // Enable registration button for all servers
                 {
                     ImGui.SameLine();
-                    if (_uiShared.IconTextButton(FontAwesomeIcon.Plus, "Register a new Elezen account"))
+                    if (_uiShared.IconTextButton(FontAwesomeIcon.Plus, "Register a new Snowcloak account"))
                     {
                         _registrationInProgress = true;
                         _ = Task.Run(async () => {
@@ -1800,7 +1800,7 @@ public class SettingsUi : WindowMediatorSubscriberBase
             {
                 var serverName = selectedServer.ServerName;
                 var serverUri = selectedServer.ServerUri;
-                var isMain = string.Equals(serverName, ApiController.ElezenServer, StringComparison.OrdinalIgnoreCase);
+                var isMain = string.Equals(serverName, ApiController.SnowcloakServer, StringComparison.OrdinalIgnoreCase);
                 var flags = isMain ? ImGuiInputTextFlags.ReadOnly : ImGuiInputTextFlags.None;
 
                 if (ImGui.InputText("Service URI", ref serverUri, 255, flags))

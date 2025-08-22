@@ -50,13 +50,13 @@ public sealed class AccountRegistrationService : IDisposable
         var authApiUrl = _serverManager.CurrentApiUrl;
 
         // Override the API URL used for auth from remote config, if one is available
-        if (authApiUrl.Equals(ApiController.ElezenServiceUri, StringComparison.Ordinal))
+        if (authApiUrl.Equals(ApiController.SnowcloakServiceUri, StringComparison.Ordinal))
         {
             var config = await _remoteConfig.GetConfigAsync<HubConnectionConfig>("mainServer").ConfigureAwait(false) ?? new();
             if (!string.IsNullOrEmpty(config.ApiUrl))
                 authApiUrl = config.ApiUrl;
             else
-                authApiUrl = ApiController.ElezenServiceApiUri;
+                authApiUrl = ApiController.SnowcloakServiceApiUri;
         }
 
         var secretKey = GenerateSecretKey();

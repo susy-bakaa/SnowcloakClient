@@ -42,11 +42,11 @@ public sealed class CommandManagerService : IDisposable
         _mareConfigService = mareConfigService;
         _commandManager.AddHandler(_commandName, new CommandInfo(OnCommand)
         {
-            HelpMessage = "Opens the Elezen UI"
+            HelpMessage = "Opens the Snowcloak UI"
         });
         _commandManager.AddHandler(_commandName2, new CommandInfo(OnCommand)
         {
-            HelpMessage = "Opens the Elezen UI"
+            HelpMessage = "Opens the Snowcloak UI"
         });
 
         // Lazy registration of all possible /ss# commands which tbf is what the game does for linkshells anyway
@@ -86,7 +86,7 @@ public sealed class CommandManagerService : IDisposable
         {
             if (_apiController.ServerState == WebAPI.SignalR.Utils.ServerState.Disconnecting)
             {
-                _mediator.Publish(new NotificationMessage("Elezen disconnecting", "Cannot use /toggle while Elezen is still disconnecting",
+                _mediator.Publish(new NotificationMessage("Snowcloak disconnecting", "Cannot use /toggle while Snowcloak is still disconnecting",
                     NotificationType.Error));
             }
 

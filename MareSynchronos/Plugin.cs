@@ -29,7 +29,7 @@ using MareSynchronos.Services.CharaData;
 
 using MareSynchronos;
 
-namespace ElezenSync;
+namespace Snowcloak;
 
 public sealed class Plugin : IDalamudPlugin
 {

@@ -31,7 +31,7 @@ public class MareConfig : IMareConfiguration
     public bool LogPerformance { get; set; } = false;
     public bool LogEvents { get; set; } = true;
     public bool HoldCombatApplication { get; set; } = false;
-    public double MaxLocalCacheInGiB { get; set; } = 20;
+    public double MaxLocalCacheInGiB { get; set; } = 100;
     public bool OpenGposeImportOnGposeStart { get; set; } = false;
     public bool OpenPopupOnAdd { get; set; } = true;
     public int ParallelDownloads { get; set; } = 10;

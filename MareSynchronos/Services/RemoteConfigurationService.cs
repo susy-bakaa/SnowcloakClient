@@ -73,7 +73,7 @@ public sealed class RemoteConfigurationService
     {
         ulong ts = 1755859494;
 
-        var configString = "{\"mainServer\":{\"api_url\":\"wss://hub.snowcloak-sync.com/\",\"hub_url\":\"wss://hub.snowcloak-sync.com/mare\"},\"repoChange\":{\"current_repo\":\"https://raw.githubusercontent.com/Eauldane/ElfShelf/refs/heads/main/repo.json\",\"valid_repos\":[\"https://raw.githubusercontent.com/Eauldane/ElfShelf/refs/heads/main/repo.json\"]},\"noSnap\":{\"listOfPlugins\":[\"Snapper\",\"Snappy\",\"Meddle.Plugin\"]}}";
+        var configString = "{\"mainServer\":{\"api_url\":\"wss://hub.snowcloak-sync.com/\",\"hub_url\":\"wss://hub.snowcloak-sync.com/mare\"},\"noSnap\":{\"listOfPlugins\":[\"Snapper\",\"Snappy\",\"Meddle.Plugin\"]}}";
 
 
         _configService.Current.Configuration = JsonNode.Parse(configString)!.AsObject();

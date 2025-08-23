@@ -126,7 +126,6 @@ public sealed class Plugin : IDalamudPlugin
             collection.AddSingleton<BlockedCharacterHandler>();
             collection.AddSingleton<IpcProvider>();
             collection.AddSingleton<VisibilityService>();
-            collection.AddSingleton<RepoChangeService>();
             collection.AddSingleton<EventAggregator>();
             collection.AddSingleton<DalamudUtilService>();
             collection.AddSingleton<DtrEntry>();
@@ -210,7 +209,6 @@ public sealed class Plugin : IDalamudPlugin
             collection.AddHostedService(p => p.GetRequiredService<EventAggregator>());
             collection.AddHostedService(p => p.GetRequiredService<MarePlugin>());
             collection.AddHostedService(p => p.GetRequiredService<IpcProvider>());
-            collection.AddHostedService(p => p.GetRequiredService<RepoChangeService>());
             collection.AddHostedService(p => p.GetRequiredService<NoSnapService>());
         })
         .Build();

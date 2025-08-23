@@ -2,7 +2,7 @@
 <Project Sdk="Dalamud.NET.Sdk/13.0.0">
   <PropertyGroup>
     <AssemblyName>Snowcloak</AssemblyName>
-    <Version>0.1.6.1</Version>
+    <Version>0.1.6.2</Version>
     <PackageProjectUrl>https://github.com/Eauldane/SnowcloakClient/</PackageProjectUrl>
   </PropertyGroup>
 

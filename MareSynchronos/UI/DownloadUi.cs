@@ -169,7 +169,7 @@ public class DownloadUi : WindowMediatorSubscriberBase
                 var dlProgressPercent = transferredBytes / (double)totalBytes;
                 drawList.AddRectFilled(dlBarStart,
                     dlBarEnd with { X = dlBarStart.X + (float)(dlProgressPercent * dlBarWidth) },
-                    UiSharedService.Color(150, 150, 255, transparency), 1);
+                    UiSharedService.Color(100, 100, 255, transparency), 1);
 
                 if (_configService.Current.TransferBarsShowText)
                 {

@@ -153,23 +153,32 @@ public partial class IntroUi : WindowMediatorSubscriberBase
             ImGui.Separator();
 
             UiSharedService.TextWrapped("""
-All of the mod files currently active on your character as well as your current character state will be uploaded to the service you registered yourself at automatically. The plugin will exclusively upload the necessary mod files and not the whole mod.
-""");
+                                        All of the mod files currently active on your character as well as your current character state will be uploaded to the service you registered yourself at automatically. The plugin will exclusively upload the necessary mod files and not the whole mod.
+                                        """);
             UiSharedService.TextWrapped("""
-If you are on a data capped internet connection, higher fees due to data usage depending on the amount of downloaded and uploaded mod files might occur. Mod files will be compressed on up- and download to save on bandwidth usage. Due to varying up- and download speeds, changes in characters might not be visible immediately. Files present on the service that already represent your active mod files will not be uploaded again.
-""");
+                                        If you are on a data capped internet connection, higher fees due to data usage depending on the amount of downloaded and uploaded mod files might occur. Mod files will be compressed on up- and download to save on bandwidth usage. Due to varying up- and download speeds, changes in characters might not be visible immediately. Files present on the service that already represent your active mod files will not be uploaded again.
+                                        """);
             UiSharedService.TextWrapped("""
-The mod files you are uploading are confidential and will not be distributed to parties other than the ones who are requesting the exact same mod files. Please think about who you are going to pair since it is unavoidable that they will receive and locally cache the necessary mod files that you have currently in use. Locally cached mod files will have arbitrary file names to discourage attempts at replicating the original mod.
-""");
+                                        The mod files you are uploading are confidential and will not be distributed to parties other than the ones who are requesting the exact same mod files. Please think about who you are going to pair since it is unavoidable that they will receive and locally cache the necessary mod files that you have currently in use. Locally cached mod files will have arbitrary file names to discourage attempts at replicating the original mod.
+                                        """);
             UiSharedService.TextWrapped("""
-The plugin creator tried their best to keep you secure. However, there is no guarantee for 100% security. Do not blindly pair your client with everyone.
-""");
+                                        The plugin creator tried their best to keep you secure. However, there is no guarantee for 100% security. Do not blindly pair your client with everyone.
+                                        """);
             UiSharedService.TextWrapped("""
-Mod files that are saved on the service will remain on the service as long as there are requests for the files from clients. After a period of not being used, the mod files will be automatically deleted.
-""");
+                                        Mod files that are saved on the service will remain on the service as long as there are requests for the files from clients. After a period of not being used, the mod files will be automatically deleted.
+                                        """);
             UiSharedService.TextWrapped("""
-This service is provided as-is.
-""");
+                                        Accounts that are inactive for ninety (90) days will be deleted for privacy reasons.
+                                        """);
+            UiSharedService.TextWrapped("""
+                                        Snowcloak is operated from servers located in the European Union. You agree not to upload any content to the service that violates EU law; and more specifically, German law.
+                                        """);
+            UiSharedService.TextWrapped("""
+                                        You may delete your account at any time from within the Settings panel of the plugin. Any mods unique to you will then be removed from the server within 14 days.
+                                        """);
+            UiSharedService.TextWrapped("""
+                                        This service is provided as-is.
+                                        """);
 
             ImGui.Separator();
             if (_timeoutTask?.IsCompleted ?? true)

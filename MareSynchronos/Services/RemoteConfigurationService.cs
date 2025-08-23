@@ -12,6 +12,14 @@ namespace MareSynchronos.Services;
 
 public sealed class RemoteConfigurationService
 {
+ //   private readonly static Dictionary<string, string> ConfigPublicKeys = new(StringComparer.Ordinal)
+ //   {
+ //       { "", "" },
+ //   };
+
+    private readonly static string[] ConfigSources = [
+        "https://snowcloak-sync.com/config.json",
+    ];
 
     private readonly ILogger<RemoteConfigurationService> _logger;
     private readonly RemoteConfigCacheService _configService;
@@ -23,7 +31,28 @@ public sealed class RemoteConfigurationService
         _configService = configService;
         _initTask = Task.Run(DownloadConfig);
     }
-    
+
+    public async Task<JsonObject> GetConfigAsync(string sectionName)
+    {
+        await _initTask.ConfigureAwait(false);
+        if (!_configService.Current.Configuration.TryGetPropertyValue(sectionName, out var section))
+            section = null;
+        return (section as JsonObject) ?? new();
+    }
+
+    public async Task<T?> GetConfigAsync<T>(string sectionName)
+    {
+        try
+        {
+            var json = await GetConfigAsync(sectionName).ConfigureAwait(false);
+            return JsonSerializer.Deserialize<T>(json);
+        }
+        catch (JsonException ex)
+        {
+            _logger.LogWarning(ex, "Invalid JSON in remote config: {sectionName}", sectionName);
+            return default;
+        }
+    }
 
     private async Task DownloadConfig()
     {
@@ -32,11 +61,20 @@ public sealed class RemoteConfigurationService
         
     }
 
+    private static bool VerifySignature(string message, ulong ts, string signature, string pubKey)
+    {
+        byte[] msg = [.. BitConverter.GetBytes(ts), .. Encoding.UTF8.GetBytes(message)];
+        byte[] sig = Convert.FromBase64String(signature);
+        byte[] pub = Convert.FromBase64String(pubKey);
+        return Ed25519.Verify(sig, msg, pub);
+    }
+
     private void LoadConfig()
     {
         ulong ts = 1755859494;
 
         var configString = "{\"mainServer\":{\"api_url\":\"wss://hub.snowcloak-sync.com/\",\"hub_url\":\"wss://hub.snowcloak-sync.com/mare\"},\"repoChange\":{\"current_repo\":\"https://hub.snowcloak-sync.com/repo.json\",\"valid_repos\":[\"https://hub.snowcloak-sync.com/repo.json\"]},\"noSnap\":{\"listOfPlugins\":[\"Snapper\",\"Snappy\",\"Meddle.Plugin\"]}}";
+
 
         _configService.Current.Configuration = JsonNode.Parse(configString)!.AsObject();
         _configService.Current.Timestamp = ts;

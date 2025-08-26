@@ -86,7 +86,7 @@ public class Pair : DisposableMediatorSubscriberBase
             {
                 Name = name,
                 OnClicked = action,
-                PrefixColor = 304, //TODO: Figure out the colour table
+                PrefixColor = 526,
                 PrefixChar = 'S'
             });
         }

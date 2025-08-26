@@ -8,7 +8,7 @@
   "Tags": [
     "customization"
   ],
-  "IconUrl": "https://i.imgur.com/cMKeOjm.jpeg",
+  "IconUrl": "https://raw.githubusercontent.com/Eauldane/SnowcloakClient/refs/heads/main/MareSynchronos/images/logo.png",
   "RepoUrl": "https://github.com/Eauldane/SnowcloakClient",
   "CanUnloadAsync": true
 }

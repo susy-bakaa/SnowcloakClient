@@ -105,7 +105,7 @@ public class CompactUi : WindowMediatorSubscriberBase
     protected override void DrawInternal()
     {
         if (_serverManager.CurrentApiUrl.Equals(ApiController.SnowcloakServiceUri, StringComparison.Ordinal))
-            UiSharedService.AccentColor = new Vector4(1.0f, 0.8666f, 0.06666f, 1.0f);
+            UiSharedService.AccentColor = new(0.4275f, 0.6863f, 1f, 1f);
         else
             UiSharedService.AccentColor = ImGuiColors.ParsedGreen;
         ImGui.SetCursorPosY(ImGui.GetCursorPosY() - ImGui.GetStyle().WindowPadding.Y - 1f * ImGuiHelpers.GlobalScale + ImGui.GetStyle().ItemSpacing.Y);

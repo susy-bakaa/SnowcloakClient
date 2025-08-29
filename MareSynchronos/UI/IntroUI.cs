@@ -151,7 +151,6 @@ public partial class IntroUi : WindowMediatorSubscriberBase
             UiSharedService.ColorText(readThis, ImGuiColors.DalamudRed);
             ImGui.SetWindowFontScale(1.0f);
             ImGui.Separator();
-
             UiSharedService.TextWrapped("""
                                         To use Snowcloak, you must be over the age of 18, or 21 in some jurisdictions. 
                                         """);

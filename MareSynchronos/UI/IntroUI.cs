@@ -153,6 +153,9 @@ public partial class IntroUi : WindowMediatorSubscriberBase
             ImGui.Separator();
 
             UiSharedService.TextWrapped("""
+                                        To use Snowcloak, you must be over the age of 18, or 21 in some jurisdictions. 
+                                        """);
+            UiSharedService.TextWrapped("""
                                         All of the mod files currently active on your character as well as your current character state will be uploaded to the service you registered yourself at automatically. The plugin will exclusively upload the necessary mod files and not the whole mod.
                                         """);
             UiSharedService.TextWrapped("""

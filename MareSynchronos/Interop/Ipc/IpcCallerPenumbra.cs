@@ -114,7 +114,7 @@ public sealed class IpcCallerPenumbra : DisposableMediatorSubscriberBase, IIpcCa
         bool penumbraAvailable = false;
         try
         {
-            penumbraAvailable = _pluginLoaded && _pluginVersion >= new Version(1, 0, 1, 0);
+            penumbraAvailable = _pluginLoaded && _pluginVersion >= new Version(1, 5, 1, 0);
             try
             {
                 penumbraAvailable &= _penumbraEnabled.Invoke();

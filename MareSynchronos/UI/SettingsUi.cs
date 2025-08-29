@@ -581,32 +581,32 @@ public class SettingsUi : WindowMediatorSubscriberBase
         _uiShared.BigText("Advanced");
 
         bool mareApi = _configService.Current.MareAPI;
-        if (ImGui.Checkbox("Enable Mare Synchronos API", ref mareApi))
+        if (ImGui.Checkbox("Enable Snowcloak Sync API", ref mareApi))
         {
             _configService.Current.MareAPI = mareApi;
             _configService.Save();
             _ipcProvider.HandleMareImpersonation();
         }
-        _uiShared.DrawHelpText("Enables handling of the Mare Synchronos API. This currently includes:\n\n" +
+        _uiShared.DrawHelpText("Enables handling of the Snowcloak Sync API. This currently includes:\n\n" +
             " - MCDF loading support for other plugins\n" +
             " - Blocking Moodles applications to paired users\n\n" +
-            "If the Mare Synchronos plugin is loaded while this option is enabled, control of its API will be relinquished.");
+            "If the Snowcloak Sync plugin is loaded while this option is enabled, control of its API will be relinquished.");
 
         using (_ = ImRaii.PushIndent())
         {
             ImGui.SameLine(300.0f * ImGuiHelpers.GlobalScale);
             if (_ipcProvider.ImpersonationActive)
             {
-                UiSharedService.ColorTextWrapped("Mare API active!", ImGuiColors.HealerGreen);
+                UiSharedService.ColorTextWrapped("Snowcloak API active!", ImGuiColors.HealerGreen);
             }
             else
             {
                 if (!mareApi)
-                    UiSharedService.ColorTextWrapped("Mare API inactive: Option is disabled", ImGuiColors.DalamudYellow);
+                    UiSharedService.ColorTextWrapped("Snowcloak API inactive: Option is disabled", ImGuiColors.DalamudYellow);
                 else if (_ipcProvider.MarePluginEnabled)
-                    UiSharedService.ColorTextWrapped("Mare API inactive: Mare plugin is loaded", ImGuiColors.DalamudYellow);
+                    UiSharedService.ColorTextWrapped("Snowcloak API inactive: Snowcloak plugin is loaded", ImGuiColors.DalamudYellow);
                 else
-                    UiSharedService.ColorTextWrapped("Mare API inactive: Unknown reason", ImGuiColors.DalamudRed);
+                    UiSharedService.ColorTextWrapped("Snowcloak API inactive: Unknown reason", ImGuiColors.DalamudRed);
             }
         }
 

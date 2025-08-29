@@ -108,7 +108,6 @@ public partial class IntroUi : WindowMediatorSubscriberBase
 
         if ((!_configService.Current.AcceptedAgreement || _configService.Current.AcceptedTOSVersion != _configService.Current.ExpectedTOSVersion) && !_readFirstPage)
         {
-            // TODO: The UI bugs hard if this page *isn't* shown before the new TOS. There's probably a way around it.
             _uiShared.BigText("Welcome to Snowcloak");
             ImGui.Separator();
             UiSharedService.TextWrapped("Snowcloak is a plugin that will replicate your full current character state including all Penumbra mods to other paired users. " +
@@ -199,7 +198,7 @@ public partial class IntroUi : WindowMediatorSubscriberBase
                 UiSharedService.TextWrapped(_timeoutLabel);
             }
         }
-        else if ((!_configService.Current.AcceptedAgreement || _configService.Current.AcceptedTOSVersion != _configService.Current.ExpectedTOSVersion)
+        else if ((_configService.Current.AcceptedAgreement || _configService.Current.AcceptedTOSVersion != _configService.Current.ExpectedTOSVersion)
                  && (string.IsNullOrEmpty(_configService.Current.CacheFolder)
                      || !_configService.Current.InitialScanComplete
                      || !Directory.Exists(_configService.Current.CacheFolder)))

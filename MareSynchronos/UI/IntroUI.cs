@@ -106,7 +106,7 @@ public partial class IntroUi : WindowMediatorSubscriberBase
     {
         if (_uiShared.IsInGpose) return;
 
-        if ((!_configService.Current.AcceptedAgreement || _configService.Current.AcceptedTOSVersion != _configService.Current.ExpectedTOSVersion) && !_readFirstPage)
+        if (!_configService.Current.AcceptedAgreement && !_readFirstPage)
         {
             _uiShared.BigText("Welcome to Snowcloak");
             ImGui.Separator();
@@ -125,7 +125,7 @@ public partial class IntroUi : WindowMediatorSubscriberBase
 #if !DEBUG
                 _timeoutTask = Task.Run(async () =>
                 {
-                    for (int i = 45; i > 0; i--)
+                    for (int i = 10; i > 0; i--)
                     {
                         _timeoutLabel = $"'I agree' button will be available in {i}s";
                         await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
@@ -136,7 +136,7 @@ public partial class IntroUi : WindowMediatorSubscriberBase
 #endif
             }
         }
-        else if ((!_configService.Current.AcceptedAgreement || _configService.Current.AcceptedTOSVersion != _configService.Current.ExpectedTOSVersion) && _readFirstPage)
+        else if (!_configService.Current.AcceptedAgreement && _readFirstPage)
         {
             using (_uiShared.UidFont.Push())
             {
@@ -189,7 +189,6 @@ public partial class IntroUi : WindowMediatorSubscriberBase
                 if (ImGui.Button("I agree##toSetup"))
                 {
                     _configService.Current.AcceptedAgreement = true;
-                    _configService.Current.AcceptedTOSVersion = _configService.Current.ExpectedTOSVersion;
                     _configService.Save();
                 }
             }
@@ -198,7 +197,7 @@ public partial class IntroUi : WindowMediatorSubscriberBase
                 UiSharedService.TextWrapped(_timeoutLabel);
             }
         }
-        else if ((_configService.Current.AcceptedAgreement || _configService.Current.AcceptedTOSVersion != _configService.Current.ExpectedTOSVersion)
+        else if (_configService.Current.AcceptedAgreement
                  && (string.IsNullOrEmpty(_configService.Current.CacheFolder)
                      || !_configService.Current.InitialScanComplete
                      || !Directory.Exists(_configService.Current.CacheFolder)))

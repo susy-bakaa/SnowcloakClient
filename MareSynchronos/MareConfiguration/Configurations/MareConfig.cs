@@ -7,6 +7,8 @@ namespace MareSynchronos.MareConfiguration.Configurations;
 [Serializable]
 public class MareConfig : IMareConfiguration
 {
+    public int ExpectedTOSVersion = 1;
+    public int AcceptedTOSVersion { get; set; } = 0;
     public bool AcceptedAgreement { get; set; } = false;
     public string CacheFolder { get; set; } = string.Empty;
     public bool DisableOptionalPluginWarnings { get; set; } = false;

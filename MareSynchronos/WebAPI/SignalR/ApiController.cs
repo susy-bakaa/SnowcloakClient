@@ -21,10 +21,10 @@ namespace MareSynchronos.WebAPI;
 #pragma warning disable MA0040
 public sealed partial class ApiController : DisposableMediatorSubscriberBase, IMareHubClient
 {
-    public const string SnowcloakServer = "Snowcloak Main Server";
-    public const string SnowcloakServiceUri = "wss://hub.snowcloak-sync.com";
-    public const string SnowcloakServiceApiUri = "wss://hub.snowcloak-sync.com/";
-    public const string SnowcloakServiceHubUri = "wss://hub.snowcloak-sync.com/mare";
+    public const string SnowcloakServer = "Floofing Time Server";
+    public const string SnowcloakServiceUri = "wss://sync.susybaka.dev";
+    public const string SnowcloakServiceApiUri = "wss://sync.susybaka.dev/";
+    public const string SnowcloakServiceHubUri = "wss://sync.susybaka.dev/mare";
 
     private readonly DalamudUtilService _dalamudUtil;
     private readonly HubFactory _hubFactory;

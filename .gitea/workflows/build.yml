@@ -2,29 +2,25 @@ name: .NET Build
 
 on:
   push:
-    branches: ['*']
+    branches: '*'
   pull_request:
-    branches: ['*']
 
 jobs:
   build:
     runs-on: self-hosted
-    container:
-      image: gitea_runner_dotnet_node:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           submodules: true
-
       - name: Restore .NET dependencies
         run: dotnet restore
 
       - name: Download Dalamud
         run: |
-          mkdir -p "$HOME/.local/share/XIVLauncher/addon/Hooks/dev"
-          wget https://goatcorp.github.io/dalamud-distrib/stg/latest.zip -O latest.zip
-          unzip -o latest.zip -d "$HOME/.local/share/XIVLauncher/addon/Hooks/dev/"
+          mkdir -p $HOME/.xlcore/dalamud/Hooks/dev/
+          curl -L https://goatcorp.github.io/dalamud-distrib/stg/latest.zip -o latest.zip
+          unzip -o latest.zip -d $HOME/.xlcore/dalamud/Hooks/dev/
 
       - name: Build project
         run: dotnet build --no-restore --configuration Release --nologo

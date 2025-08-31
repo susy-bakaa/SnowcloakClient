@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: dotnet
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

@@ -8,7 +8,9 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted   # Uses your custom runner
+    runs-on: self-hosted
+    container:
+      image: gitea_runner_dotnet_node:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

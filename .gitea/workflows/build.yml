@@ -35,7 +35,7 @@ jobs:
         env:
           GITEA_TOKEN: ${{ secrets.BUILD_SNOWCLOAK_CLIENT  }}
         run: |
-          API_URL="https://imbuilding.anuke.org/api/v1/repos/ProfessorFartsalot/repo/releases"
+          API_URL="https://imbuilding.anuke.org/api/v1/repos/ProfessorFartsalot/SnowcloakClient/releases"
           TAG="v$(date +%Y%m%d%H%M)"
           # Create release
           RELEASE_ID=$(curl -s -X POST \

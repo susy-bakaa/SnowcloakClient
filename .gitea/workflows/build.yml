@@ -13,10 +13,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
-
-      - name: Verify .NET installation
-        run: dotnet --version
-
       - name: Restore dependencies
         run: dotnet restore
 
@@ -29,13 +25,8 @@ jobs:
       - name: Build project
         run: dotnet build --no-restore --configuration Release --nologo
 
-      - name: Publish Windows self-contained executable
-        run: |
-          dotnet publish MareSynchronos.csproj \
-            -c Release \
-            -r win-x64 \
-            --self-contained true \
-            -o ./publish
+      - name: Publish Windows executable
+        run: dotnet publish -c Release -r win-x64 --self-contained true -o ./publish
 
       - name: Archive published files
         run: zip -r SnowcloakClient.zip ./publish/*

@@ -387,7 +387,7 @@ public class CompactUi : WindowMediatorSubscriberBase
         {
             ImGui.SetCursorPosX((ImGui.GetWindowContentRegionMin().X + UiSharedService.GetWindowContentRegionWidth()) / 2 - (userSize.X + textSize.X) / 2 - ImGui.GetStyle().ItemSpacing.X / 2);
             if (!printShard) ImGui.AlignTextToFramePadding();
-            ImGui.TextColored(ImGuiColors.ParsedGreen, userCount);
+            ImGui.TextColored(new Vector4(0.675f, 0.985f, 1f, 1f), userCount);
             ImGui.SameLine();
             if (!printShard) ImGui.AlignTextToFramePadding();
             ImGui.TextUnformatted("Users Online");

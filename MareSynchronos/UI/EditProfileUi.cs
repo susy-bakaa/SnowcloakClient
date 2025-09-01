@@ -4,6 +4,7 @@ using Dalamud.Interface.Colors;
 using Dalamud.Interface.ImGuiFileDialog;
 using Dalamud.Interface.Textures.TextureWraps;
 using Dalamud.Interface.Utility;
+using Dalamud.Utility;
 using MareSynchronos.API.Data;
 using MareSynchronos.API.Dto.User;
 using MareSynchronos.Services;
@@ -28,14 +29,14 @@ public class EditProfileUi : WindowMediatorSubscriberBase
     private IDalamudTextureWrap? _pfpTextureWrap;
     private string _profileDescription = string.Empty;
     private byte[] _profileImage = [];
-    private bool _showFileDialogError = false;
+    private string _showFileDialogError = string.Empty;
     private bool _wasOpen;
 
     public EditProfileUi(ILogger<EditProfileUi> logger, MareMediator mediator,
         ApiController apiController, UiSharedService uiSharedService, FileDialogManager fileDialogManager,
         ServerConfigurationManager serverConfigurationManager,
         MareProfileManager mareProfileManager, PerformanceCollectorService performanceCollectorService)
-        : base(logger, mediator, "Snowcloak Edit Profile###SnowcloakSyncEditProfileUI", performanceCollectorService)
+        : base(logger, mediator, "Snowcloak Profile Editor###SnowcloakSyncEditProfileUI", performanceCollectorService)
     {
         IsOpen = false;
         this.SizeConstraints = new()
@@ -92,20 +93,13 @@ public class EditProfileUi : WindowMediatorSubscriberBase
             ImGui.Image(_pfpTextureWrap.Handle, ImGuiHelpers.ScaledVector2(_pfpTextureWrap.Width, _pfpTextureWrap.Height));
         }
 
-        var spacing = ImGui.GetStyle().ItemSpacing.X;
+        var spacing = ImGui.GetStyle().ItemSpacing.X + 200;
         ImGuiHelpers.ScaledRelativeSameLine(256, spacing);
         using (_uiSharedService.GameFont.Push())
         {
             var descriptionTextSize = ImGui.CalcTextSize(profile.Description, hideTextAfterDoubleHash: false, 256f);
             var childFrame = ImGuiHelpers.ScaledVector2(256 + ImGui.GetStyle().WindowPadding.X + ImGui.GetStyle().WindowBorderSize, 256);
-            if (descriptionTextSize.Y > childFrame.Y)
-            {
-                _adjustedForScollBarsOnlineProfile = true;
-            }
-            else
-            {
-                _adjustedForScollBarsOnlineProfile = false;
-            }
+            _adjustedForScollBarsOnlineProfile = (descriptionTextSize.Y > childFrame.Y);
             childFrame = childFrame with
             {
                 X = childFrame.X + (_adjustedForScollBarsOnlineProfile ? ImGui.GetStyle().ScrollbarSize : 0),
@@ -123,8 +117,17 @@ public class EditProfileUi : WindowMediatorSubscriberBase
         ImGui.EndDisabled();
 
         ImGui.Separator();
+        _uiSharedService.BigText("Rules and Guidelines");
+        UiSharedService.ColorTextWrapped("Users that are paired with you (not paused) will be able to see your profile picture and description.", ImGuiColors.DalamudWhite);
+        UiSharedService.ColorTextWrapped("All users have the capability to report your profile if it violates the rules.", ImGuiColors.DalamudGrey);
+        UiSharedService.ColorTextWrapped(" - Please do NOT upload anything that can be considered highly illegal or obscene (beastiality, sexual acts depicting minors or anything representing a minor (including Lalafel), etc.)", ImGuiColors.DalamudRed);
+        UiSharedService.ColorTextWrapped(" - Please avoid the use of slurs, hate speech, threatening behaviour, etc.", ImGuiColors.DalamudRed);
+        UiSharedService.ColorTextWrapped(" - In the event we receive a report of an offensive profile, we may disable your profile forever or terminate your Snowcloak service account.", ImGuiColors.DalamudRed);
+        UiSharedService.ColorTextWrapped(" - You may not appeal any bans of your profile and or Snowcloak service account.", ImGuiColors.DalamudRed);
+        UiSharedService.ColorTextWrapped("Users who wish to mark their profile as NSFW should enable the toggle below.", ImGuiColors.DalamudWhite);
+        ImGui.Separator();
         _uiSharedService.BigText("Profile Settings");
-
+        UiSharedService.ColorTextWrapped("Profile pictures must be cropped to 256x256px and have a file size of 250KiB or smaller.", ImGuiColors.DalamudGrey);
         if (_uiSharedService.IconTextButton(FontAwesomeIcon.FileUpload, "Upload new profile picture"))
         {
             _fileDialogManager.OpenFileDialog("Select new Profile picture", ".png", (success, file) =>
@@ -138,11 +141,10 @@ public class EditProfileUi : WindowMediatorSubscriberBase
 
                     if (format.Width > 256 || format.Height > 256 || (fileContent.Length > 250 * 1024))
                     {
-                        _showFileDialogError = true;
+                        _showFileDialogError = format.Width > 256 || format.Height > 256 ? "ERROR: Image dimensions must be 256x256px or smaller." : fileContent.Length > 250 * 1024 ? "ERROR: File size was bigger than 250KiB" : "ERROR: An unknown error has occured.";
                         return;
                     }
-
-                    _showFileDialogError = false;
+                    _showFileDialogError = string.Empty;
                     await _apiController.UserSetProfile(new UserProfileDto(new UserData(_apiController.UID), Disabled: false, IsNSFW: null, Convert.ToBase64String(fileContent), Description: null))
                         .ConfigureAwait(false);
                 });
@@ -155,9 +157,9 @@ public class EditProfileUi : WindowMediatorSubscriberBase
             _ = _apiController.UserSetProfile(new UserProfileDto(new UserData(_apiController.UID), Disabled: false, IsNSFW: null, "", Description: null));
         }
         UiSharedService.AttachToolTip("Clear your currently uploaded profile picture");
-        if (_showFileDialogError)
+        if (!_showFileDialogError.IsNullOrEmpty())
         {
-            UiSharedService.ColorTextWrapped("The profile picture must be a PNG file with a maximum height and width of 256px and 250KiB size", ImGuiColors.DalamudRed);
+            UiSharedService.ColorTextWrapped(_showFileDialogError, ImGuiColors.DalamudRed);
         }
         var isNsfw = profile.IsNSFW;
         if (ImGui.Checkbox("Profile is NSFW", ref isNsfw))

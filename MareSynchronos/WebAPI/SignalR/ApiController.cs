@@ -121,7 +121,7 @@ public sealed partial class ApiController : DisposableMediatorSubscriberBase, IM
         {
             Logger.LogWarning("Multiple secret keys for current character");
             _connectionDto = null;
-            Mediator.Publish(new NotificationMessage("Multiple Identical Characters detected", "Your Service configuration has multiple characters with the same name and world set up. Delete the duplicates in the character management to be able to connect to Mare.",
+            Mediator.Publish(new NotificationMessage("Multiple Identical Characters detected", "Your Service configuration has multiple characters with the same name and world set up. Delete the duplicates in the character management to be able to connect.",
                 NotificationType.Error));
             await StopConnection(ServerState.MultiChara).ConfigureAwait(false);
             _connectionCancellationTokenSource?.Cancel();

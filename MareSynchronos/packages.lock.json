@@ -534,7 +534,7 @@
       "maresynchronos.api": {
         "type": "Project",
         "dependencies": {
-          "MessagePack.Annotations": "[3.1.4, )"
+          "MessagePack.Annotations": "[2.5.129, )"
         }
       }
     }

@@ -130,6 +130,9 @@ public class DrawGroupPair : DrawPairBase
 
     protected override float DrawRightSide(float textPosY, float originalY)
     {
+        var pauseIcon = _pair.UserPair!.OwnPermissions.IsPaused() ? FontAwesomeIcon.Play : FontAwesomeIcon.Pause;
+        var pauseIconSize = _uiSharedService.GetIconButtonSize(pauseIcon);
+        var spacingX = ImGui.GetStyle().ItemSpacing.X;
         var entryUID = _fullInfoDto.UserAliasOrUID;
         var entryIsMod = _fullInfoDto.GroupPairStatusInfo.IsModerator();
         var entryIsOwner = string.Equals(_pair.UserData.UID, _group.OwnerUID, StringComparison.Ordinal);
@@ -148,7 +151,7 @@ public class DrawGroupPair : DrawPairBase
         bool showInfo = (individualAnimDisabled || individualSoundsDisabled || animDisabled || soundsDisabled);
         bool showPlus = _pair.UserPair == null;
         bool showBars = (userIsOwner || (userIsModerator && !entryIsMod && !entryIsOwner)) || !_pair.IsPaused;
-
+        bool showPause = true; 
         var spacing = ImGui.GetStyle().ItemSpacing.X;
         var permIcon = (individualAnimDisabled || individualSoundsDisabled || individualVFXDisabled) ? FontAwesomeIcon.ExclamationTriangle
             : ((soundsDisabled || animDisabled || vfxDisabled) ? FontAwesomeIcon.InfoCircle : FontAwesomeIcon.None);
@@ -156,6 +159,11 @@ public class DrawGroupPair : DrawPairBase
         var infoIconWidth = UiSharedService.GetIconSize(permIcon).X;
         var plusButtonWidth = _uiSharedService.GetIconButtonSize(FontAwesomeIcon.Plus).X;
         var barButtonWidth = _uiSharedService.GetIconButtonSize(FontAwesomeIcon.Bars).X;
+        var barButtonSize = _uiSharedService.GetIconButtonSize(FontAwesomeIcon.Bars);
+
+        var windowEndX = ImGui.GetWindowContentRegionMin().X + UiSharedService.GetWindowContentRegionWidth();
+        var rightSidePos = windowEndX - barButtonSize.X;
+
 
         var pos = ImGui.GetWindowContentRegionMin().X + UiSharedService.GetWindowContentRegionWidth() + spacing
             - (showShared ? (runningIconWidth + spacing) : 0)
@@ -267,6 +275,7 @@ public class DrawGroupPair : DrawPairBase
             ImGui.SameLine();
         }
 
+
         if (showPlus)
         {
             ImGui.SetCursorPosY(originalY);
@@ -278,7 +287,6 @@ public class DrawGroupPair : DrawPairBase
             UiSharedService.AttachToolTip("Pair with " + entryUID + " individually");
             ImGui.SameLine();
         }
-
         if (showBars)
         {
             ImGui.SetCursorPosY(originalY);
@@ -287,6 +295,24 @@ public class DrawGroupPair : DrawPairBase
             {
                 ImGui.OpenPopup("Popup");
             }
+            ImGui.SameLine();
+        }
+        if (showPause)
+        {
+            rightSidePos -= pauseIconSize.X + spacingX;
+            ImGui.SameLine(rightSidePos);
+            ImGui.SetCursorPosY(originalY);
+
+            if (_uiSharedService.IconButton(pauseIcon))
+            {
+                var perm = _pair.UserPair!.OwnPermissions;
+                perm.SetPaused(!perm.IsPaused());
+                _ = _apiController.UserSetPairPermissions(new(_pair.UserData, perm));
+            }
+
+            UiSharedService.AttachToolTip(!_pair.UserPair!.OwnPermissions.IsPaused()
+                ? "Pause pairing with " + entryUID
+                : "Resume pairing with " + entryUID);
         }
 
         if (ImGui.BeginPopup("Popup"))

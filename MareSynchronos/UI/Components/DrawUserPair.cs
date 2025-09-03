@@ -19,6 +19,7 @@ public class DrawUserPair : DrawPairBase
     protected readonly MareMediator _mediator;
     private readonly SelectGroupForPairUi _selectGroupForPairUi;
     private readonly CharaDataManager _charaDataManager;
+    public long VramUsage { get; set; }
 
     public DrawUserPair(string id, Pair entry, UidDisplayHandler displayHandler, ApiController apiController,
         MareMediator mareMediator, SelectGroupForPairUi selectGroupForPairUi,
@@ -84,6 +85,7 @@ public class DrawUserPair : DrawPairBase
                 visibleTooltip += "Files Size: " + UiSharedService.ByteToString(_pair.LastAppliedDataBytes, true);
                 if (_pair.LastAppliedApproximateVRAMBytes >= 0)
                 {
+                    VramUsage = _pair.LastAppliedApproximateVRAMBytes;
                     visibleTooltip += Environment.NewLine + "Approx. VRAM Usage: " + UiSharedService.ByteToString(_pair.LastAppliedApproximateVRAMBytes, true);
                 }
                 if (_pair.LastAppliedDataTris >= 0)
@@ -96,6 +98,8 @@ public class DrawUserPair : DrawPairBase
             UiSharedService.AttachToolTip(visibleTooltip);
         }
     }
+
+
 
     protected override float DrawRightSide(float textPosY, float originalY)
     {

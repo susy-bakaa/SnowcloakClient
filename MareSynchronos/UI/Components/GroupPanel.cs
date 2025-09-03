@@ -454,7 +454,7 @@ internal sealed class GroupPanel
                 ImGui.Separator();
                 if (_mareConfig.Current.SortSyncshellsByVRAM)
                 {
-                    List<DrawGroupPair> sortedVisibleUsers = visibleUsers.OrderBy(o=>o._VRAMBytes).ToList();
+                    List<DrawGroupPair> sortedVisibleUsers = visibleUsers.OrderBy(o=>o.VramUsage).ToList();
                     _uidDisplayHandler.RenderPairList(sortedVisibleUsers);
                 }
                 else

@@ -1078,6 +1078,8 @@ public class SettingsUi : WindowMediatorSubscriberBase
         if (ImGui.Checkbox("Sort visible syncshell users by VRAM usage", ref sortSyncshellByVRAM))
         {
             _configService.Current.SortSyncshellsByVRAM = sortSyncshellByVRAM;
+            _logger.LogWarning("Changing value: {sortSyncshellsByVRAM}", sortSyncshellByVRAM);
+
             _configService.Save();
         }
         _uiShared.DrawHelpText("This will put users using the most VRAM in a syncshell at the top of the list.");

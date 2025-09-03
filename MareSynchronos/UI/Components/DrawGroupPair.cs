@@ -20,7 +20,7 @@ public class DrawGroupPair : DrawPairBase
     private readonly GroupPairFullInfoDto _fullInfoDto;
     private readonly GroupFullInfoDto _group;
     private readonly CharaDataManager _charaDataManager;
-    public long _VRAMBytes;
+    public long VramUsage { get; set; }
 
     public DrawGroupPair(string id, Pair entry, ApiController apiController,
         MareMediator mareMediator, GroupFullInfoDto group, GroupPairFullInfoDto fullInfoDto,
@@ -87,7 +87,7 @@ public class DrawGroupPair : DrawPairBase
                 presenceText += "Files Size: " + UiSharedService.ByteToString(_pair.LastAppliedDataBytes, true);
                 if (_pair.LastAppliedApproximateVRAMBytes >= 0)
                 {
-                    _VRAMBytes = _pair.LastAppliedApproximateVRAMBytes;
+                    VramUsage = _pair.LastAppliedApproximateVRAMBytes;
                     presenceText += Environment.NewLine + "Approx. VRAM Usage: " + UiSharedService.ByteToString(_pair.LastAppliedApproximateVRAMBytes, true);
                 }
                 if (_pair.LastAppliedDataTris >= 0)
@@ -130,7 +130,7 @@ public class DrawGroupPair : DrawPairBase
 
     protected override float DrawRightSide(float textPosY, float originalY)
     {
-        var pauseIcon = _pair.UserPair!.OwnPermissions.IsPaused() ? FontAwesomeIcon.Play : FontAwesomeIcon.Pause;
+        var pauseIcon = _fullInfoDto.GroupUserPermissions.IsPaused() ? FontAwesomeIcon.Play : FontAwesomeIcon.Pause;
         var pauseIconSize = _uiSharedService.GetIconButtonSize(pauseIcon);
         var spacingX = ImGui.GetStyle().ItemSpacing.X;
         var entryUID = _fullInfoDto.UserAliasOrUID;
@@ -158,6 +158,8 @@ public class DrawGroupPair : DrawPairBase
         var runningIconWidth = _uiSharedService.GetIconButtonSize(FontAwesomeIcon.Running).X;
         var infoIconWidth = UiSharedService.GetIconSize(permIcon).X;
         var plusButtonWidth = _uiSharedService.GetIconButtonSize(FontAwesomeIcon.Plus).X;
+        var pauseButtonWidth = _uiSharedService.GetIconButtonSize(FontAwesomeIcon.Plus).X;
+
         var barButtonWidth = _uiSharedService.GetIconButtonSize(FontAwesomeIcon.Bars).X;
         var barButtonSize = _uiSharedService.GetIconButtonSize(FontAwesomeIcon.Bars);
 
@@ -169,6 +171,7 @@ public class DrawGroupPair : DrawPairBase
             - (showShared ? (runningIconWidth + spacing) : 0)
             - (showInfo ? (infoIconWidth + spacing) : 0)
             - (showPlus ? (plusButtonWidth + spacing) : 0)
+            - (showPause ? (pauseButtonWidth + spacing) : 0)
             - (showBars ? (barButtonWidth + spacing) : 0);
 
         ImGui.SameLine(pos);
@@ -287,6 +290,24 @@ public class DrawGroupPair : DrawPairBase
             UiSharedService.AttachToolTip("Pair with " + entryUID + " individually");
             ImGui.SameLine();
         }
+        if (showPause)
+        {
+            //rightSidePos -= pauseIconSize.X + spacingX;
+            ImGui.SetCursorPosY(originalY);
+
+            if (_uiSharedService.IconButton(pauseIcon))
+            {
+                var perm = _fullInfoDto.GroupUserPermissions;
+                var newPaused = !perm.IsPaused();
+                perm.SetPaused(newPaused);
+            }
+
+            UiSharedService.AttachToolTip(!_fullInfoDto.GroupUserPermissions.IsPaused()
+                ? "Pause pairing with " + entryUID
+                : "Resume pairing with " + entryUID);
+            ImGui.SameLine();
+
+        }
         if (showBars)
         {
             ImGui.SetCursorPosY(originalY);
@@ -295,26 +316,7 @@ public class DrawGroupPair : DrawPairBase
             {
                 ImGui.OpenPopup("Popup");
             }
-            ImGui.SameLine();
         }
-        if (showPause)
-        {
-            rightSidePos -= pauseIconSize.X + spacingX;
-            ImGui.SameLine(rightSidePos);
-            ImGui.SetCursorPosY(originalY);
-
-            if (_uiSharedService.IconButton(pauseIcon))
-            {
-                var perm = _pair.UserPair!.OwnPermissions;
-                perm.SetPaused(!perm.IsPaused());
-                _ = _apiController.UserSetPairPermissions(new(_pair.UserData, perm));
-            }
-
-            UiSharedService.AttachToolTip(!_pair.UserPair!.OwnPermissions.IsPaused()
-                ? "Pause pairing with " + entryUID
-                : "Resume pairing with " + entryUID);
-        }
-
         if (ImGui.BeginPopup("Popup"))
         {
             if ((userIsModerator || userIsOwner) && !(entryIsMod || entryIsOwner))

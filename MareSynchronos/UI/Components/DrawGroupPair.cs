@@ -20,7 +20,7 @@ public class DrawGroupPair : DrawPairBase
     private readonly GroupPairFullInfoDto _fullInfoDto;
     private readonly GroupFullInfoDto _group;
     private readonly CharaDataManager _charaDataManager;
-    public long VramUsage { get; set; }
+    public long VRAMUsage { get; set; }
 
     public DrawGroupPair(string id, Pair entry, ApiController apiController,
         MareMediator mareMediator, GroupFullInfoDto group, GroupPairFullInfoDto fullInfoDto,
@@ -87,7 +87,6 @@ public class DrawGroupPair : DrawPairBase
                 presenceText += "Files Size: " + UiSharedService.ByteToString(_pair.LastAppliedDataBytes, true);
                 if (_pair.LastAppliedApproximateVRAMBytes >= 0)
                 {
-                    VramUsage = _pair.LastAppliedApproximateVRAMBytes;
                     presenceText += Environment.NewLine + "Approx. VRAM Usage: " + UiSharedService.ByteToString(_pair.LastAppliedApproximateVRAMBytes, true);
                 }
                 if (_pair.LastAppliedDataTris >= 0)

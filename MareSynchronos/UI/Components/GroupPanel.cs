@@ -427,12 +427,13 @@ internal sealed class GroupPanel
             var visibleUsers = new List<DrawGroupPair>();
             var onlineUsers = new List<DrawGroupPair>();
             var offlineUsers = new List<DrawGroupPair>();
-
+            
+            
             foreach (var pair in sortedPairs)
             {
                 var drawPair = new DrawGroupPair(
                     groupDto.GID + pair.UserData.UID, pair,
-                    ApiController, _mainUi.Mediator, groupDto,
+                    ApiController, _mainUi.Mediator, groupDto, 
                     pair.GroupPair.Single(
                         g => GroupDataComparer.Instance.Equals(g.Key.Group, groupDto.Group)
                     ).Value,
@@ -452,16 +453,9 @@ internal sealed class GroupPanel
             {
                 ImGui.TextUnformatted("Visible");
                 ImGui.Separator();
-                if (_mareConfig.Current.SortSyncshellsByVRAM)
-                {
-                    List<DrawGroupPair> sortedVisibleUsers = visibleUsers.OrderBy(o=>o.VramUsage).ToList();
-                    _uidDisplayHandler.RenderPairList(sortedVisibleUsers);
-                }
-                else
-                {
-                    _uidDisplayHandler.RenderPairList(visibleUsers);
+                _uidDisplayHandler.RenderPairList(visibleUsers);
 
-                }
+                
             }
 
             if (onlineUsers.Count > 0)

@@ -235,11 +235,17 @@ public class Pair : DisposableMediatorSubscriberBase
     {
         string? noteOrName = GetNoteOrName();
 
-        if (noteOrName != null)
+        if (_mareConfig.Current.SortSyncshellsByVRAM)
+        { 
+            return($"0{LastAppliedApproximateVRAMBytes}");
+        }
+        else if (noteOrName != null) {
             return $"0{noteOrName}";
-        else
+        }
+        else {
             return $"9{UserData.AliasOrUID}";
-    }
+        }
+        }
 
     public string GetPlayerNameHash()
     {

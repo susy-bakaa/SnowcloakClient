@@ -20,6 +20,7 @@ public class DrawGroupPair : DrawPairBase
     private readonly GroupPairFullInfoDto _fullInfoDto;
     private readonly GroupFullInfoDto _group;
     private readonly CharaDataManager _charaDataManager;
+    public long _VRAMBytes;
 
     public DrawGroupPair(string id, Pair entry, ApiController apiController,
         MareMediator mareMediator, GroupFullInfoDto group, GroupPairFullInfoDto fullInfoDto,
@@ -80,11 +81,13 @@ public class DrawGroupPair : DrawPairBase
             }
             if (_pair.LastAppliedDataBytes >= 0)
             {
+
                 presenceText += UiSharedService.TooltipSeparator;
                 presenceText += ((!_pair.IsVisible) ? "(Last) " : string.Empty) + "Mods Info" + Environment.NewLine;
                 presenceText += "Files Size: " + UiSharedService.ByteToString(_pair.LastAppliedDataBytes, true);
                 if (_pair.LastAppliedApproximateVRAMBytes >= 0)
                 {
+                    _VRAMBytes = _pair.LastAppliedApproximateVRAMBytes;
                     presenceText += Environment.NewLine + "Approx. VRAM Usage: " + UiSharedService.ByteToString(_pair.LastAppliedApproximateVRAMBytes, true);
                 }
                 if (_pair.LastAppliedDataTris >= 0)

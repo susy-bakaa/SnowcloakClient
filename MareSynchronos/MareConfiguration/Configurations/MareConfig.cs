@@ -7,6 +7,7 @@ namespace MareSynchronos.MareConfiguration.Configurations;
 [Serializable]
 public class MareConfig : IMareConfiguration
 {
+    public bool SortSyncshellsByVRAM { get; set; } = false;
     public int ExpectedTOSVersion = 2;
     public int AcceptedTOSVersion { get; set; } = 0;
     public bool AcceptedAgreement { get; set; } = false;

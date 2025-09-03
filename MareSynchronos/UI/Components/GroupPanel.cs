@@ -452,7 +452,16 @@ internal sealed class GroupPanel
             {
                 ImGui.TextUnformatted("Visible");
                 ImGui.Separator();
-                _uidDisplayHandler.RenderPairList(visibleUsers);
+                if (_mareConfig.Current.SortSyncshellsByVRAM)
+                {
+                    List<DrawGroupPair> sortedVisibleUsers = visibleUsers.OrderBy(o=>o._VRAMBytes).ToList();
+                    _uidDisplayHandler.RenderPairList(sortedVisibleUsers);
+                }
+                else
+                {
+                    _uidDisplayHandler.RenderPairList(visibleUsers);
+
+                }
             }
 
             if (onlineUsers.Count > 0)

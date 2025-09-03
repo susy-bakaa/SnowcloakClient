@@ -956,6 +956,7 @@ public class SettingsUi : WindowMediatorSubscriberBase
         _uiShared.BigText("UI");
         var showCharacterNames = _configService.Current.ShowCharacterNames;
         var showVisibleSeparate = _configService.Current.ShowVisibleUsersSeparately;
+        var sortSyncshellByVRAM = _configService.Current.SortSyncshellsByVRAM;
         var showOfflineSeparate = _configService.Current.ShowOfflineUsersSeparately;
         var showProfiles = _configService.Current.ProfilesShow;
         var showNsfwProfiles = _configService.Current.ProfilesAllowNsfw;
@@ -1074,7 +1075,12 @@ public class SettingsUi : WindowMediatorSubscriberBase
             _configService.Save();
         }
         _uiShared.DrawHelpText("This will show all currently visible users in a special 'Visible' group in the main UI.");
-
+        if (ImGui.Checkbox("Sort visible syncshell users by VRAM usage", ref sortSyncshellByVRAM))
+        {
+            _configService.Current.SortSyncshellsByVRAM = sortSyncshellByVRAM;
+            _configService.Save();
+        }
+        _uiShared.DrawHelpText("This will put users using the most VRAM in a syncshell at the top of the list.");
         if (ImGui.Checkbox("Show separate Offline group", ref showOfflineSeparate))
         {
             _configService.Current.ShowOfflineUsersSeparately = showOfflineSeparate;

@@ -183,6 +183,8 @@ public sealed partial class ApiController : DisposableMediatorSubscriberBase, IM
 
                 _connectionDto = await GetConnectionDto().ConfigureAwait(false);
 
+                await CheckClientHealth().ConfigureAwait(false);
+
                 ServerState = ServerState.Connected;
 
                 var currentClientVer = Assembly.GetExecutingAssembly().GetName().Version!;
@@ -315,13 +317,12 @@ public sealed partial class ApiController : DisposableMediatorSubscriberBase, IM
         {
             await Task.Delay(TimeSpan.FromSeconds(30), ct).ConfigureAwait(false);
             var healthy = await CheckClientHealth().ConfigureAwait(false);
-            Logger.LogDebug("Checking Client Health State returned {0} and hub connection {1}", healthy, _mareHub.State == HubConnectionState.Connected);
             if (!healthy || _mareHub.State != HubConnectionState.Connected)
             {
                 _unhealthy++;
-                if (_unhealthy > 1)
+                if (_unhealthy > 0)
                 {
-                    Logger.LogWarning("Health check failed more than once, forcing reconnect.");
+                    Logger.LogWarning("Health check failed, forcing reconnect. ClientHealth: {0} HubConnected: {1}", healthy, _mareHub.State != HubConnectionState.Connected);
                     await ForceResetConnection().ConfigureAwait(false);
                     _unhealthy = 0;
                 }
@@ -402,7 +403,7 @@ public sealed partial class ApiController : DisposableMediatorSubscriberBase, IM
         {
             var users = await GroupsGetUsersInGroup(group).ConfigureAwait(false);
             foreach (var user in users)
-        {
+            {
                 Logger.LogDebug("Group Pair: {user}", user);
                 _pairManager.AddGroupPair(user);
             }
@@ -492,42 +493,27 @@ public sealed partial class ApiController : DisposableMediatorSubscriberBase, IM
     //Because this plugin really likes to bug out with connections, lets "fix" it....
     public async Task ForceResetConnection()
     {
-        if (_mareHub == null || !_initialized) return;
+        if (!_initialized) return;
         Logger.LogInformation("ForceReconnect called");
-        ServerState = ServerState.Reconnecting;
 
         try
         {
-            // Cancel previous health checks to avoid overlaps
+            await StopConnection(ServerState.Disconnected).ConfigureAwait(false);
+
+            // Cancel any ongoing health checks to prevent conflicts
             _healthCheckTokenSource?.Cancel();
             _healthCheckTokenSource?.Dispose();
             _healthCheckTokenSource = null;
 
-            // Re-initialize hooks and refresh connection state
-            InitializeApiHooks();
-            _connectionDto = await GetConnectionDto(publishConnected: false).ConfigureAwait(false);
+            await CreateConnections().ConfigureAwait(false);
 
-            if (_connectionDto.ServerVersion != IMareHub.ApiVersion)
-            {
-                await StopConnection(ServerState.VersionMisMatch).ConfigureAwait(false);
-                return;
-            }
-
-            ServerState = ServerState.Connected;
-
-            // Reload all pairs
-            await LoadIninitialPairs().ConfigureAwait(false);
-            await LoadOnlinePairs().ConfigureAwait(false);
-
-            Mediator.Publish(new ConnectedMessage(_connectionDto));
             Logger.LogInformation("ForceReconnect completed successfully");
         }
         catch (Exception ex)
         {
-            Logger.LogCritical(ex, "Failure during ForceReconnect, disconnecting");
+            Logger.LogError(ex, "Failure during ForceReconnect, disconnecting");
             await StopConnection(ServerState.Disconnected).ConfigureAwait(false);
         }
     }
-
 }
 #pragma warning restore MA0040

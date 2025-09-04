@@ -315,8 +315,8 @@ public sealed partial class ApiController : DisposableMediatorSubscriberBase, IM
         {
             await Task.Delay(TimeSpan.FromSeconds(30), ct).ConfigureAwait(false);
             var healthy = await CheckClientHealth().ConfigureAwait(false);
-            Logger.LogDebug("Checking Client Health State returned {0}", healthy);
-            if (!healthy)
+            Logger.LogDebug("Checking Client Health State returned {0} and hub connection {1}", healthy, _mareHub.State == HubConnectionState.Connected);
+            if (!healthy || _mareHub.State != HubConnectionState.Connected)
             {
                 _unhealthy++;
                 if (_unhealthy > 1)

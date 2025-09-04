@@ -129,7 +129,7 @@ public class DrawGroupPair : DrawPairBase
 
     protected override float DrawRightSide(float textPosY, float originalY)
     {
-        var pauseIcon = _fullInfoDto.GroupUserPermissions.IsPaused() ? FontAwesomeIcon.Play : FontAwesomeIcon.Pause;
+        var pauseIcon = _pair.IsPaused ? FontAwesomeIcon.Play : FontAwesomeIcon.Pause;
         var pauseIconSize = _uiSharedService.GetIconButtonSize(pauseIcon);
         var spacingX = ImGui.GetStyle().ItemSpacing.X;
         var entryUID = _fullInfoDto.UserAliasOrUID;
@@ -296,9 +296,10 @@ public class DrawGroupPair : DrawPairBase
 
             if (_uiSharedService.IconButton(pauseIcon))
             {
-                var perm = _fullInfoDto.GroupUserPermissions;
-                var newPaused = !perm.IsPaused();
-                perm.SetPaused(newPaused);
+                var perm = _pair.UserPair!.OwnPermissions;
+                perm.SetPaused(!perm.IsPaused());
+                _ = _apiController.UserSetPairPermissions(new(_pair.UserData, perm));
+
             }
 
             UiSharedService.AttachToolTip(!_fullInfoDto.GroupUserPermissions.IsPaused()

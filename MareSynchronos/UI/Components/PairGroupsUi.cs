@@ -5,8 +5,6 @@ using MareSynchronos.API.Data.Extensions;
 using MareSynchronos.MareConfiguration;
 using MareSynchronos.UI.Handlers;
 using MareSynchronos.WebAPI;
-using Serilog.Core;
-using System.Diagnostics;
 
 namespace MareSynchronos.UI.Components;
 

@@ -183,6 +183,8 @@ public sealed partial class ApiController : DisposableMediatorSubscriberBase, IM
 
                 _connectionDto = await GetConnectionDto().ConfigureAwait(false);
 
+                await CheckClientHealth().ConfigureAwait(false);
+
                 ServerState = ServerState.Connected;
 
                 var currentClientVer = Assembly.GetExecutingAssembly().GetName().Version!;
@@ -308,14 +310,24 @@ public sealed partial class ApiController : DisposableMediatorSubscriberBase, IM
         _ = Task.Run(async () => await StopConnection(ServerState.Disconnected).ConfigureAwait(false));
         _connectionCancellationTokenSource?.Cancel();
     }
-
+    private int _unhealthy = 0;
     private async Task ClientHealthCheck(CancellationToken ct)
     {
         while (!ct.IsCancellationRequested && _mareHub != null)
         {
             await Task.Delay(TimeSpan.FromSeconds(30), ct).ConfigureAwait(false);
-            Logger.LogDebug("Checking Client Health State");
-            _ = await CheckClientHealth().ConfigureAwait(false);
+            var healthy = await CheckClientHealth().ConfigureAwait(false);
+            if (!healthy || _mareHub.State != HubConnectionState.Connected)
+            {
+                _unhealthy++;
+                if (_unhealthy > 0)
+                {
+                    Logger.LogWarning("Health check failed, forcing reconnect. ClientHealth: {0} HubConnected: {1}", healthy, _mareHub.State != HubConnectionState.Connected);
+                    await ForceResetConnection().ConfigureAwait(false);
+                    _unhealthy = 0;
+                }
+            }
+            else _unhealthy = 0;
         }
     }
 
@@ -391,7 +403,7 @@ public sealed partial class ApiController : DisposableMediatorSubscriberBase, IM
         {
             var users = await GroupsGetUsersInGroup(group).ConfigureAwait(false);
             foreach (var user in users)
-        {
+            {
                 Logger.LogDebug("Group Pair: {user}", user);
                 _pairManager.AddGroupPair(user);
             }
@@ -477,6 +489,31 @@ public sealed partial class ApiController : DisposableMediatorSubscriberBase, IM
         }
 
         ServerState = state;
+    }
+    //Because this plugin really likes to bug out with connections, lets "fix" it....
+    public async Task ForceResetConnection()
+    {
+        if (!_initialized) return;
+        Logger.LogInformation("ForceReconnect called");
+
+        try
+        {
+            await StopConnection(ServerState.Disconnected).ConfigureAwait(false);
+
+            // Cancel any ongoing health checks to prevent conflicts
+            _healthCheckTokenSource?.Cancel();
+            _healthCheckTokenSource?.Dispose();
+            _healthCheckTokenSource = null;
+
+            await CreateConnections().ConfigureAwait(false);
+
+            Logger.LogInformation("ForceReconnect completed successfully");
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failure during ForceReconnect, disconnecting");
+            await StopConnection(ServerState.Disconnected).ConfigureAwait(false);
+        }
     }
 }
 #pragma warning restore MA0040

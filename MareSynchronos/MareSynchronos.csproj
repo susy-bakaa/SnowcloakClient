@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Dalamud.NET.Sdk/13.1.0">
   <PropertyGroup>
-    <AssemblyName>Snowcloak</AssemblyName>
+    <AssemblyName>SnowcloakFloof</AssemblyName>
     <Version>0.2.4</Version>
-    <PackageProjectUrl>https://git.snowcloak-sync.com/Eauldane/SnowcloakClient/</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/susy-bakaa/SnowcloakClient/</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>

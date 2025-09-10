@@ -1,5 +1,7 @@
 # Snowcloak Sync
-The snow may cloak the world in silence, but come in, warm up, and reveal your true colours. This is an unofficial fork of the SnowcloakClient that changes the default server to a custom one. Please use the official one unless you have a reason to use this one.
+The snow may cloak the world in silence, but come in, warm up, and reveal your true colours. 
+
+This is an unofficial fork of the SnowcloakClient that changes the default server to a custom one. Please use the official one unless you have a reason to use this one.
 
 A Dalamud plugin.
 

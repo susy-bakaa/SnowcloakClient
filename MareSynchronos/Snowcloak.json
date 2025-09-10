@@ -1,14 +1,14 @@
 {
-  "Author": "susy_baka, Eauldane",
-  "Name": "Snowcloak Skibidi Edition",
+  "Author": "Eauldane",
+  "Name": "Snowcloak",
   "Punchline": "Share your true self.",
-  "Description": "This plugin will synchronize your Penumbra mods and current Glamourer state with other paired clients automatically. This is an unofficial fork of the original Snowcloak.",
-  "InternalName": "SnowcloakFloof",
+  "Description": "This plugin will synchronize your Penumbra mods and current Glamourer state with other paired clients automatically.",
+  "InternalName": "Snowcloak",
   "ApplicableVersion": "any",
   "Tags": [
     "customization"
   ],
   "IconUrl": "https://raw.githubusercontent.com/Eauldane/SnowcloakClient/refs/heads/main/MareSynchronos/images/logo.png",
-  "RepoUrl": "https://github.com/susy-bakaa/SnowcloakClient",
+  "RepoUrl": "https://git.snowcloak-sync.com/Eauldane/SnowcloakClient",
   "CanUnloadAsync": true
 }
